@@ -1,0 +1,176 @@
+
+
+#calendarWrap
+{
+	min-width: 500px;
+
+}
+
+.month {
+	height: 100%;
+}
+
+.week {
+	display: flex;
+	border-bottom:1px solid #ccc;
+}
+
+.day {
+	color: #ccc;
+	padding: 10px;
+	flex: 1 1 0;
+	text-align:center;
+	align-items: center;
+	justify-content: center;	
+}
+
+.dayNumber
+{
+    width: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    font-size: 16px;
+    border: 1px solid #f7f7f7;
+	margin-left:auto;
+	margin-right:auto;
+	font-family:'Open Sans';
+	font-weight:100; 		
+}
+
+/* Mon - Sunday black bar */
+.dayName
+{
+	background:	#000;
+	color:#fff;
+	padding:10px;
+	font-size:14px;
+	font-family:'Open Sans';
+	font-weight:100; 	
+}
+
+.day .hasSlots
+{
+		background:#0F8291;
+		color:#fff;
+		font-weight:bold;
+}
+
+.day .hasSlots:hover
+{
+	cursor:pointer;
+	background:#c1cbcc;
+	color:#0F8291;
+	border:#0F8291;
+
+
+}
+
+
+/* top title diusplay e.g. Mar 2018 */
+.monthWrapper
+{
+	background:#0F8291;
+	color:#fff;
+	width:100%;
+	text-align:center;	
+    display: flex;
+    justify-content: space-between;		
+	align-items: center;
+}
+
+
+.monthName
+{
+	padding:5px;
+}
+
+.monthWrapper .monthName .currentYear
+{
+	font-size:20px;	
+
+}
+
+
+.monthWrapper .monthName
+{
+	font-size:50px;
+	font-family:'Roboto', sans-serif;
+	font-weight:100; 
+}
+
+.prevMonthLink, .nextMonthLink
+{
+	padding:10px;
+}
+
+.prevMonthLink
+{
+	width: 100px;
+	text-align:left;
+}
+
+
+.nextMonthLink
+{
+	width: 100px;
+	text-align:right;
+}
+
+
+.loadCalMonth
+{
+	color:#ccc;
+	font-size:40px;
+}
+.loadCalMonth:hover
+{
+	cursor:pointer;
+	color:#fff;
+}
+
+
+/* Confirm booking styles */
+.availableSlotsDiv textarea
+{
+	width:100%;
+	height:150px;
+	padding:5px;
+	border:1px solid #0F8291;
+	border-radius:3px;
+}
+
+
+/* Tutor dashboard */
+
+.myTuteesOuterWrap
+{
+
+}
+
+.myTuteesWrap
+{
+	display: flex;
+	flex-wrap: wrap;  
+}	
+.myTuteesStudent
+{
+	width:150px;
+	margin:15px;
+	text-align:center;		
+	
+}
+
+.myTuteesStudent img
+{
+	width:110px;
+}
+
+.studentName
+{
+	
+}
+.studentID
+{
+	color:#ccc;
+	font-size:12px;
+}
