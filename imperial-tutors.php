@@ -2,8 +2,9 @@
 /*
 Plugin Name: Imperial Tutors
 Description: Imperial Tutors - booking forms and dashboard views
-Version: 0.1
+Version: 0.1.1
 Author: Alex Furr
+GitHub Plugin URI: https://github.com/ImperialCollegeLondon/imperial-tutors
 */
 
 // Global defines
