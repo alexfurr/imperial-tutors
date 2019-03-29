@@ -4,7 +4,7 @@ $imperialTutorsDB = new imperialTutorsDB();
 
 class imperialTutorsDB
 {
-	var $DBversion 		= '0.3';	
+	var $DBversion 		= '0.5';	
 	
 	//~~~~~
 	function __construct ()
@@ -41,6 +41,7 @@ class imperialTutorsDB
 	
 	function createTables ()
 	{
+
 		global $wpdb;
 		global $dbTable_tutorBookings;
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -58,13 +59,16 @@ class imperialTutorsDB
 			duration int NOT NULL,
 			location varchar(255),
 			tuteeUsername varchar(50),
-			PRIMARY KEY (slotID),
-			KEY tuteeBookings (tuteeUsername),
-			KEY tutorSlots (tutorUsername)
+			tookPlace tinyint,
+			INDEX tuteeBookings (tuteeUsername),
+			INDEX (tutorUsername),
+			INDEX (tutorUsername),
+			PRIMARY KEY (slotID)			
 			
 		) $charset_collate;";
 			
 		$feedback = dbDelta( $sql );
+
 			
 	}
 

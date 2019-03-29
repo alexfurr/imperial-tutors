@@ -25,6 +25,9 @@ class tutorsAjax
 		// Adds booking slot to the DB
 		add_action( 'wp_ajax_confirmSlotBooking', array($this, 'confirmSlotBooking' ));
 
+		// Tutors confirm if the meeting happenned or not
+		add_action( 'wp_ajax_confirmSlotHappenned', array($this, 'confirmSlotHappenned' ));
+		
 		
 
 	}
@@ -169,6 +172,31 @@ class tutorsAjax
 
 
 	}	
+	
+	public static function confirmSlotHappenned()
+	{
+		$slotID = $_POST['slotID'];
+		$status = $_POST['status'];
+		
+		
+		// Update into the DB
+		global  $wpdb;
+		global $dbTable_tutorBookings;
+		
+		$table_name = $imperialTutorsDB->dbTable_tutorBookings;
+	
+		// Do the update			
+		$wpdb->query( $wpdb->prepare(
+			"UPDATE  $dbTable_tutorBookings SET tookPlace=%d WHERE slotID = %d",	$status, $slotID
+		));  
+		
+		
+		echo imperialTutorsDraw::drawSlotStatus($slotID, $status);
+		
+		die();
+		
+		
+	}
 	
 	
 } // End Class

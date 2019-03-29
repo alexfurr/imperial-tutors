@@ -19,6 +19,7 @@ include_once( TUTORS_PATH . '/classes/class-queries.php');
 include_once( TUTORS_PATH . '/classes/class-calendar.php');
 include_once( TUTORS_PATH . '/classes/class-ajax.php');
 include_once( TUTORS_PATH . '/classes/class-actions.php');
+include_once( TUTORS_PATH . '/classes/class-utils.php');
 
 
 

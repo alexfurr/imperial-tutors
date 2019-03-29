@@ -1,4 +1,5 @@
 <?php
+
 class imperialTutorActions
 {
 	public static function cancelSlot($slotID)
@@ -55,141 +56,140 @@ class imperialTutorActions
 
 	}	
 	
+
+	
 	
 	
 	public static function createSlots($tutorUsername)
 	{
 		
-			// Create array blank dates and blank times
-			$slotDateArray = array();
-			$startTimesArray = array();
-			foreach ($_POST as $KEY => $VALUE)	
-			{
-				$$KEY = $VALUE;
-			}
-			
-			
-			if($creationType=="single")
-			{
-				$slotDateArray[]=$singleDatepicker;
-				
-				
-				
-				if($singleMin_AMPM=="PM")
-				{
-					$singleHour = $singleHour+12;
-				}
-				$startTime = $singleHour.':'.$singleMin;
-				$startTimesArray[]=$startTime;		
-
-			}
-			else
-			{
-			
-			
-				$startDate = strtotime($multiDatepickerStart);
-				$endDate = strtotime($multiDatepickerEnd);
-
-				
-				// Get the date array
-				switch ($frequency)
-				{
-					case "day":
-						$timeFrequency = '+1 day';
-					break;
-					
-					case "weekly":			
-						$timeFrequency = '+1 week';
-					break;
-					
-					case "fortnightly":			
-						$timeFrequency = '+2 weeks';
-					break;	
-
-					case "monthly":			
-						$timeFrequency = '+1 month';
-					break;				
-					
-					
-				}
+		// Create array blank dates and blank times
+		$slotDateArray = array();
+		$startTimesArray = array();
+		foreach ($_POST as $KEY => $VALUE)	
+		{
+			$$KEY = $VALUE;
+		}
 		
-				$i = $startDate;
-				
-				while ($i<=$endDate)
-				{		
-					$thisDate = date('Y-m-d', $i);			
-					$slotDateArray[] = $thisDate;
-					$i = strtotime($timeFrequency, $i);						
-				}			
-				
-				
-				
-				
-				if($multiMin_AMPM=="PM")
-				{
-					$multiHour = $multiHour+12;
-				}
-				$startTime = $multiHour.':'.$multiMin;
-			
-				$startTimesArray[] = $startTime;
-				
-				if($slotCount>1)
-				{
-					$i=1;
-					$lastStartTime = $startTime;
-					
-					$interval = $duration + $timeBetween;
-					while ($i<$slotCount)
-					{
-						$nextStartTime = strtotime("+".$interval." minutes", strtotime($lastStartTime));
-						$lastStartTime =  date('H:i', $nextStartTime);
-						
-						$startTimesArray[] = $lastStartTime;
-
-						$i++;
-						
-					}
-				}
-			}
-			
-			
-			// Now go through all the dates and times and add to the DB		
-			global $wpdb;
-			global $dbTable_tutorBookings;
 		
-			foreach ($slotDateArray as $myDate)
+		if($creationType=="single")
+		{
+			$slotDateArray[]=$singleDatepicker;
+			
+			
+			/*
+			if($singleMin_AMPM=="PM")
 			{
-				foreach ($startTimesArray as $myTime)
-				{
-					$thisDateTime = $myDate.' '.$myTime;
-					
-					// Create unique ID for this item
-					$UID = md5(uniqid(mt_rand(), true)) . "@medlearn.imperial.ac.uk\r\n";
-										
-					$wpdb->query( $wpdb->prepare(
-					"INSERT INTO ".$dbTable_tutorBookings." (tutorUsername, slotDate, duration, location, UID) 
-					VALUES ( %s, %s, %d, %s, %s )",
-					array(
-						$tutorUsername,
-						$thisDateTime,
-						$duration,
-						$location,
-						$UID,
-						)
-					));
-
-
-
-
-					}					
+				$singleHour = $singleHour+12;
 			}
+			*/
+			$startTime = $singleHour.':'.$singleMin;
+			$startTimesArray[]=$startTime;
+			$whichTutee = $_POST['whichTutee'];
+
+		}
+		else
+		{
+		
+		
+			$startDate = strtotime($multiDatepickerStart);
+			$endDate = strtotime($multiDatepickerEnd);
+
+			$whichTutee = '';
+			
+			// Get the date array
+			switch ($frequency)
+			{
+				case "day":
+					$timeFrequency = '+1 day';
+				break;
+				
+				case "weekly":			
+					$timeFrequency = '+1 week';
+				break;
+				
+				case "fortnightly":			
+					$timeFrequency = '+2 weeks';
+				break;	
+
+				case "monthly":			
+					$timeFrequency = '+1 month';
+				break;				
+				
+				
+			}
+	
+			$i = $startDate;
+			
+			while ($i<=$endDate)
+			{		
+				$thisDate = date('Y-m-d', $i);			
+				$slotDateArray[] = $thisDate;
+				$i = strtotime($timeFrequency, $i);						
+			}			
 			
 			
 			
+			/*
+			if($multiMin_AMPM=="PM")
+			{
+				$multiHour = $multiHour+12;
+			}
+			*/
+			$startTime = $multiHour.':'.$multiMin;
+		
+			$startTimesArray[] = $startTime;
 			
-			
+			if($slotCount>1)
+			{
+				$i=1;
+				$lastStartTime = $startTime;
+				
+				$interval = $duration + $timeBetween;
+				while ($i<$slotCount)
+				{
+					$nextStartTime = strtotime("+".$interval." minutes", strtotime($lastStartTime));
+					$lastStartTime =  date('H:i', $nextStartTime);
+					
+					$startTimesArray[] = $lastStartTime;
+
+					$i++;
+					
+				}
+			}
+		}
+		
+		
+		// Now go through all the dates and times and add to the DB		
+		global $wpdb;
+		global $dbTable_tutorBookings;
+	
+		foreach ($slotDateArray as $myDate)
+		{
+			foreach ($startTimesArray as $myTime)
+			{
+				$thisDateTime = $myDate.' '.$myTime;
+				
+				// Create unique ID for this item
+				$UID = md5(uniqid(mt_rand(), true)) . "@medlearn.imperial.ac.uk\r\n";
+									
+				$wpdb->query( $wpdb->prepare(
+				"INSERT INTO ".$dbTable_tutorBookings." (tutorUsername, tuteeUsername, slotDate, duration, location, UID) 
+				VALUES ( %s, %s, %s, %d, %s, %s )",
+				array(
+					$tutorUsername,
+					$whichTutee,
+					$thisDateTime,
+					$duration,
+					$location,
+					$UID,
+					)
+				));
+
+			}					
+		}
+	
 	}
-
 	
 } // End Class
 ?>

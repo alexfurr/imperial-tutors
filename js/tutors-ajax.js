@@ -97,6 +97,8 @@ function drawDaySlots(thisDate, tutorUsername)
 
 function confirmSlotBookingCheck(slotID)
 {
+	
+
 	jQuery.ajax({
 		type: 'POST',
 		url: tutorBookingParams.ajaxurl,
@@ -138,6 +140,37 @@ function confirmSlotBooking(slotID)
 	
 }
 
+
+
+
+function confirmSlotHappenned(slotID, status)
+{
+			document.getElementById('slotStatus_'+slotID).innerHTML = "Saving...";
+	
+	
+		jQuery.ajax({
+		type: 'POST',
+		url: tutorBookingParams.ajaxurl,
+		data: {			
+			"action"		: "confirmSlotHappenned",
+			"slotID"		: slotID,
+			"status"		: status,
+			"security"		: tutorBookingParams.ajax_nonce
+		},
+		success: function(data)
+		{
+			
+			document.getElementById('slotStatus_'+slotID).innerHTML = data;
+
+		}
+			
+	});
+}
+
+
+
+
+
 function confirmSlotCancelCheck(slotID, formAction)
 {
 	
@@ -153,10 +186,7 @@ function confirmSlotCancelCheck(slotID, formAction)
 	// Show the popup
 	document.getElementById('imperial-modal-content').innerHTML = html;	
 	document.getElementById('imperial-modal').style.display = "block";
-
-	
 }
-
 
 
 		

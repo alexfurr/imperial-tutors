@@ -18,7 +18,6 @@ class tutorCalendar
 		// Get the number of days in this month
 		$daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 		
-		
 		if($month<10){$month='0'.$month;} // Format the month if missing a zero
 		
 		
@@ -51,7 +50,7 @@ class tutorCalendar
 		// Add any blank divs to the start
 		
 		$thisDay = 1;
-		while($thisDay < $daysInMonth)
+		while($thisDay <= $daysInMonth)
 		{
 			
 			// Count the items in the array

@@ -3,6 +3,22 @@
 class imperialTutorQueries
 {
 	
+
+	public static function getAllSlots($tutorUsername)
+	{
+		
+		global $wpdb;
+		global $dbTable_tutorBookings;
+		
+			
+		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tutorUsername='" . $tutorUsername."' ORDER by slotDate ASC";
+		$tutorSlots =  $wpdb->get_results( $sql );
+
+		return $tutorSlots;				
+	}		
+	
+	
+	
 	
 	public static function getAllFutureSlots($tutorUsername)
 	{
@@ -13,14 +29,26 @@ class imperialTutorQueries
 		$today = date('Y-m-d');
 			
 		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tutorUsername='" . $tutorUsername."' AND date(slotDate) >='".$today."' ORDER by slotDate ASC";
-
-		echo $sql;
 		
 		$tutorSlots =  $wpdb->get_results( $sql );
 
 		return $tutorSlots;				
 	}	
 	
+	public static function getAllPastSlots($tutorUsername)
+	{
+		
+		global $wpdb;
+		global $dbTable_tutorBookings;
+		
+		$today = date('Y-m-d H:i:s');
+			
+		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tutorUsername='" . $tutorUsername."' AND date(slotDate) <'".$today."' ORDER by slotDate ASC";
+		
+		$tutorSlots =  $wpdb->get_results( $sql );
+
+		return $tutorSlots;				
+	}		
 	
 	
 	public static function getActiveSlots($tutorUsername, $slotDate="")
@@ -125,7 +153,7 @@ class imperialTutorQueries
 
 	
 	// Have both usernames in case of tutor switch and don't want to confuse tutors
-	public static function getMyUpcomingSlots($username, $tutorUsername)
+	public static function getMyUpcomingSlots($tuteeUsername, $tutorUsername)
 	{
 		
 		global $wpdb;
@@ -133,13 +161,84 @@ class imperialTutorQueries
 		
 		$today = date('Y-m-d');
 			
-		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tuteeUsername='" . $username."' AND tutorUsername = '".$tutorUsername."' AND date(slotDate) >='".$today."' ORDER by slotDate ASC";
+		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tuteeUsername='" . $tuteeUsername."' AND tutorUsername = '".$tutorUsername."' AND date(slotDate) >='".$today."' ORDER by slotDate ASC";
 		
 		$myTutorSlots =  $wpdb->get_results( $sql, ARRAY_A );
 
 		return $myTutorSlots;				
 	}	
 	
+	// Have both usernames in case of tutor switch and don't want to confuse tutors
+	public static function getMyBookedSlots($username)
+	{
+		
+		global $wpdb;
+		global $dbTable_tutorBookings;
+		
+		$today = date('Y-m-d');
+			
+		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tuteeUsername IS NOT NULL AND tutorUsername = '".$username."' ORDER by slotDate ASC";
+		$mySlots =  $wpdb->get_results( $sql );
+
+		return $mySlots;				
+	}		
+	
+	
+	static function getAllTutors($academicYear)
+	{
+		global $wpdb;
+		global $imperialNetworkDB;		
+		
+		$tutorAllocationsTable = $imperialNetworkDB::imperialTableNames()['dbTable_tutorAllocations'];		
+		$usersTable = $imperialNetworkDB::imperialTableNames()['dbTable_users'];		
+			
+		$sql = "SELECT $tutorAllocationsTable.tutorUsername, $usersTable.title, 
+		$usersTable.first_name, $usersTable.last_name, $usersTable.email FROM $tutorAllocationsTable
+		INNER JOIN $usersTable ON $tutorAllocationsTable.tutorUsername = $usersTable.username 
+		WHERE academicYear='$academicYear' GROUP by tutorUsername";
+		
+		$allTutors =  $wpdb->get_results( $sql, ARRAY_A );
+
+		return $allTutors;			
+	}
+	
+	
+	// gets a massive list of ALL tutor tutee allocations
+	static function getAllTutorAllocations($academicYear)
+	{
+		global $wpdb;
+		global $imperialNetworkDB;		
+		
+		$tutorAllocationsTable = $imperialNetworkDB::imperialTableNames()['dbTable_tutorAllocations'];		
+			
+		$sql = "SELECT * FROM $tutorAllocationsTable WHERE academicYear='$academicYear'";
+		
+		$allocations =  $wpdb->get_results( $sql, ARRAY_A );
+
+		return $allocations;			
+	}	
+	
+	static function getUnsignedOffSlots($username)
+	{
+		global $wpdb;
+		global $dbTable_tutorBookings;
+		
+		$today = date('Y-m-d H:i:s');
+			
+		$sql = "SELECT * FROM $dbTable_tutorBookings WHERE tutorUsername='" . $username."' 
+		AND (tuteeUsername IS NOT NULL OR tuteeUsername <>'')		
+		AND (tookPlace IS NULL OR tookPlace ='')		
+		AND date(slotDate) <'".$today."' ORDER by slotDate ASC";
+
+		$slots =  $wpdb->get_results( $sql );
+
+		
+		return $slots;
+
+
+	}
+	
+
 
 	
 	
